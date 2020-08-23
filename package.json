@@ -22,7 +22,8 @@
         "node-audio": "0.0.10",
         "react": "latest",
         "react-dom": "latest",
-        "react-scripts": "latest"
+        "react-scripts": "latest",
+        "web-audio-daw": "^4.9.1"
     },
     "main": "src/electron-starter.js",
     "browserslist": {

@@ -15,29 +15,26 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-function SimpleSelect({ label, options = [], ...props }) {
+function SimpleSelect({ label, options = [], field, onChange, ...props }) {
     const classes = useStyles();
-    const [value, setValue] = React.useState('');
-
-    const handleChange = (event) => {
-        setValue(event.target.value);
-    };
-    console.log(options);
     return (
         <div className={classes.root}>
             <FormControl variant="outlined" className={classes.formControl}>
                 <InputLabel id="outlined-label">{label}</InputLabel>
                 <Select
+                    {...props}
+                    value={props.value}
                     labelId="outlined-label"
                     id="demo-simple-select-outlined"
-                    value={value}
-                    onChange={handleChange}
+                    onChange={(e) => onChange({ field: field, device: e.target.value })}
                     label={label}>
                     <MenuItem value="">
                         <em>None</em>
                     </MenuItem>
                     {options.map((option, index) => (
-                        <MenuItem value={option.name}>{option.name}</MenuItem>
+                        <MenuItem key={`option-${index}`} value={option}>
+                            {option.label}
+                        </MenuItem>
                     ))}
                 </Select>
             </FormControl>
