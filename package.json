@@ -1,0 +1,40 @@
+{
+    "name": "create-react-app",
+    "version": "4.0.0",
+    "private": true,
+    "scripts": {
+        "start": "react-scripts start",
+        "build": "react-scripts build",
+        "test": "react-scripts test",
+        "eject": "react-scripts eject",
+        "electron": "electron ."
+    },
+    "dependencies": {
+        "@material-ui/core": "^4.11.0",
+        "@material-ui/icons": "^4.9.1",
+        "@material-ui/lab": "^4.0.0-alpha.56",
+        "axios": "^0.19.2",
+        "boost-lib": "^0.11.3",
+        "clsx": "^1.1.1",
+        "electron": "latest",
+        "express": "^4.17.1",
+        "naudiodon": "^2.2.4",
+        "node-audio": "0.0.10",
+        "react": "latest",
+        "react-dom": "latest",
+        "react-scripts": "latest"
+    },
+    "main": "src/electron-starter.js",
+    "browserslist": {
+        "production": [
+            ">0.2%",
+            "not dead",
+            "not op_mini all"
+        ],
+        "development": [
+            "last 1 chrome version",
+            "last 1 firefox version",
+            "last 1 safari version"
+        ]
+    }
+}
