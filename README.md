@@ -1,6 +1,5 @@
 # AsaroVST
 
-```
 Run the app in the browser:
 
 ```bash
