@@ -10,7 +10,6 @@ npm start
 
 ```
 
-```
 Run the electron app:
 will open the app in the electron wrapper window
 
