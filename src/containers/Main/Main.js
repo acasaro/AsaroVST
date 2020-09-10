@@ -9,25 +9,27 @@ import { attachSinkId } from 'utils/audio-utils';
 import styles from './styles.js';
 import VolumeSlider from 'components/VolumeSlider/VolumeSlider.js';
 import SimpleSelect from 'components/SimpleSelect/SimpleSelect.js';
-import Mic from 'components/Mic';
+import AudioAnalyser from 'components/AudioAnalyser/AudioAnalyser.js';
 
 class Main extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            live: false,
+            streamActive: false,
+            stream: null,
             constraints: {
                 audio: true,
-                video: false,
             },
             sideBar: true,
             audioInputOptions: [],
             audioOutputOptions: [],
         };
+        this.audioElement = '';
+        this.audioConstraints = this.state.constraints;
     }
     componentDidMount() {
         // Gets <audio> source to begin passing options
-        this.setState({ audioElement: document.querySelector('audio') });
+        this.audioElement = document.querySelector('audio');
         // Helper function to get native in/out devices
         this.getSelectOptions();
     }
@@ -52,22 +54,22 @@ class Main extends Component {
 
     updateAudioDestination = ({ device }) => {
         const audioDestination = device.deviceId;
-        attachSinkId(this.state.audioElement, audioDestination);
+        attachSinkId(this.audioElement, audioDestination);
         this.setState({ audioDestination: device });
     };
 
     updateAudioSource = ({ device }) => {
-        console.log(device);
         const audioSource = device.deviceId;
-
         this.setState({
             constraints: {
-                ...this.state.contraints,
+                ...this.state.constraints,
                 audio: { deviceId: device.deviceId ? { exact: audioSource } : undefined },
             },
             audioSource: device,
         });
+        console.log(`Success, audio input device attached: ${audioSource}`);
     };
+
     // Toggles UI Side Menu
     toggleSidebar = ({ setOpen }) => {
         this.setState({ sideBar: setOpen });
@@ -75,37 +77,43 @@ class Main extends Component {
 
     // Initalizes  Live Stream
     handleLiveSwitchChange = ({ value }) => {
-        if (window.stream) {
-            window.stream.getTracks().forEach((track) => {
-                track.stop();
-            });
+        if (this.state.stream) {
+            this.stopLiveAudio();
+        } else {
+            this.startLiveAudio();
         }
-        if (value) {
-            navigator.mediaDevices
-                .getUserMedia(this.state.constraints)
-                .then(this.initializeAudioStream)
-                .catch(this.streamError);
-        }
-        this.setState({ live: value });
     };
 
-    initializeAudioStream = (stream) => {
-        const audioTracks = stream.getAudioTracks();
-        console.log('Got stream with constraints:', this.state.constraints);
-        console.log('Using audio device: ' + audioTracks[0].label);
-        stream.oninactive = function () {
+    startLiveAudio = async () => {
+        let stream = null;
+        try {
+            stream = await navigator.mediaDevices.getUserMedia(this.state.constraints);
+            const audioTracks = stream.getAudioTracks();
+            console.log('Got stream with constraints:', this.state.constraints);
+            console.log('Using audio device: ' + audioTracks[0].label);
+            this.audioElement.srcObject = stream;
+            this.setState({ stream, streamActive: true });
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    stopLiveAudio() {
+        this.state.stream.getTracks().forEach((track) => track.stop());
+        this.state.stream.oninactive = function () {
             console.log('Stream ended');
         };
-        window.stream = stream;
-        this.state.audioElement.srcObject = stream;
-    };
+        this.setState({ stream: null, streamActive: false });
+    }
+    handleVolumeChange = ({ value }) => {
+        console.log(value);
 
-    // Handles Error on Media Stream
-    streamError = (error) => {
-        const errorMessage = 'navigator.MediaDevices.getUserMedia error: ' + error.message + ' ' + error.name;
-        console.log(errorMessage);
+        this.setState({
+            constraints: {
+                ...this.state.constraints,
+                audio: { autoGainControl: { exact: value } },
+            },
+        });
     };
-
     render() {
         console.log('state', this.state);
         const { classes } = this.props;
@@ -117,7 +125,7 @@ class Main extends Component {
                     onClick={this.toggleSidebar}
                     LiveAudioSwitchProps={{
                         onChange: this.handleLiveSwitchChange.bind(this),
-                        currentValue: this.state.live,
+                        currentValue: this.state.streamActive,
                     }}
                 />
                 <main
@@ -127,8 +135,8 @@ class Main extends Component {
                     <div className={classes.drawerHeader} />
                     <Grid container spacing={3}>
                         <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <VolumeSlider />
+                            <Paper className={classes.paperVolume} elevation={0}>
+                                <VolumeSlider max={1} min={0} step={0.1} onChange={this.handleVolumeChange} />
                             </Paper>
                         </Grid>
                         <Grid item xs={6}>
@@ -152,8 +160,8 @@ class Main extends Component {
                             </Paper>
                         </Grid>
                         <Grid item xs={12}>
-                            <Paper className={classes.paper}>
-                                <Mic />
+                            <Paper className={classes.paperAudioAnalyser}>
+                                {this.state.stream && <AudioAnalyser audio={this.state.stream} />}
                             </Paper>
                         </Grid>
                     </Grid>

@@ -40,5 +40,15 @@ const styles = (theme) => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
     },
+    paperVolume: {
+        padding: theme.spacing(2),
+        textAlign: 'center',
+        color: theme.palette.text.secondary,
+        backgroundColor: 'transparent',
+    },
+    paperAudioAnalyser: {
+        minHeight: 150,
+        backgroundColor: '#1f2a3394',
+    },
 });
 export default styles;

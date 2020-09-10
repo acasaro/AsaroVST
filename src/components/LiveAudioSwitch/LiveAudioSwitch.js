@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Switch, FormControlLabel, FormGroup } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 // Utilities

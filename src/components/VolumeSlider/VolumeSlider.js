@@ -12,28 +12,29 @@ const useStyles = makeStyles({
     },
 });
 
-export default function VolumeSlider() {
+export default function VolumeSlider({ ...props }) {
     const classes = useStyles();
     const [value, setValue] = React.useState(30);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
+        props.onChange({ value });
     };
 
     return (
         <div className={classes.root}>
-            <Typography id="continuous-slider" gutterBottom>
+            <Typography id="continuous-slider" color={'secondary'} gutterBottom>
                 Volume
             </Typography>
             <Grid container spacing={2}>
                 <Grid item>
-                    <VolumeDown />
+                    <VolumeDown color={'secondary'} />
                 </Grid>
                 <Grid item xs>
-                    <Slider value={value} onChange={handleChange} aria-labelledby="continuous-slider" />
+                    <Slider {...props} value={value} onChange={handleChange} color={'secondary'} />
                 </Grid>
                 <Grid item>
-                    <VolumeUp />
+                    <VolumeUp color={'secondary'} />
                 </Grid>
             </Grid>
         </div>

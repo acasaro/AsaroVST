@@ -20,19 +20,14 @@ function SimpleSelect({ label, options = [], field, onChange, ...props }) {
     return (
         <div className={classes.root}>
             <FormControl variant="outlined" className={classes.formControl}>
-                <InputLabel id="outlined-label">{label}</InputLabel>
+                <InputLabel>{label}</InputLabel>
                 <Select
-                    {...props}
                     value={props.value}
-                    labelId="outlined-label"
-                    id="demo-simple-select-outlined"
-                    onChange={(e) => onChange({ field: field, device: e.target.value })}
-                    label={label}>
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
+                    labelWidth={150}
+                    label={props.label}
+                    onChange={(e) => onChange({ field: field, device: e.target.value })}>
                     {options.map((option, index) => (
-                        <MenuItem key={`option-${index}`} value={option}>
+                        <MenuItem key={`${option.kind}-${index}`} value={option}>
                             {option.label}
                         </MenuItem>
                     ))}

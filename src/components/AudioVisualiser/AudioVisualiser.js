@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { withStyles } from '@material-ui/core/styles';
+import styles from './styles';
 
 class AudioVisualiser extends Component {
     constructor(props) {
@@ -13,14 +15,15 @@ class AudioVisualiser extends Component {
     draw() {
         const { audioData } = this.props;
         const canvas = this.canvas.current;
-        const height = canvas.height;
-        const width = canvas.width;
         const context = canvas.getContext('2d');
+        const height = 150;
+
+        const width = context.canvas.width;
         let x = 0;
         const sliceWidth = (width * 1.0) / audioData.length;
 
         context.lineWidth = 2;
-        context.strokeStyle = '#000000';
+        context.strokeStyle = '#F6AC5D';
         context.clearRect(0, 0, width, height);
 
         context.beginPath();
@@ -35,8 +38,9 @@ class AudioVisualiser extends Component {
     }
 
     render() {
-        return <canvas width="300" height="300" ref={this.canvas} />;
+        const { classes } = this.props;
+        return <canvas className={classes.canvasRoot} id={'audioVisualiser'} ref={this.canvas} />;
     }
 }
 
-export default AudioVisualiser;
+export default withStyles(styles)(AudioVisualiser);
