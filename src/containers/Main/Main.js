@@ -11,7 +11,8 @@ import VolumeSlider from "components/VolumeSlider/VolumeSlider.js";
 import SimpleSelect from "components/SimpleSelect/SimpleSelect.js";
 import AudioAnalyser from "components/AudioAnalyser/AudioAnalyser.js";
 import Drawer from "components/Drawer/Drawer.js";
-
+import PluginNavigator from "components/PluginNavigator";
+import PluginEditor from "components/PluginEditor";
 class Main extends Component {
   constructor(props) {
     super(props);
@@ -138,13 +139,9 @@ class Main extends Component {
           }}
         />
         <Drawer></Drawer>
-        <main
-          className={clsx(classes.content, {
-            [classes.contentShift]: sideBar,
-          })}
-        >
-          <div className={classes.drawerHeader} />
-          <Grid container spacing={3}>
+        <main className={classes.appContainer}>
+          <PluginEditor></PluginEditor>
+          {/* <Grid container spacing={3}>
             <Grid item xs={12}>
               <Paper className={classes.paperVolume} elevation={0}>
                 <VolumeSlider
@@ -182,7 +179,7 @@ class Main extends Component {
                 )}
               </Paper>
             </Grid>
-          </Grid>
+                </Grid> */}
         </main>
         <audio id="gum-local" autoPlay></audio>
       </div>

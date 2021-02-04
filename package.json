@@ -17,7 +17,9 @@
         "electron": "latest",
         "react": "latest",
         "react-dom": "latest",
-        "react-scripts": "latest"
+        "react-scripts": "latest",
+        "react-sortablejs": "^6.0.0",
+        "sortablejs": "^1.13.0"
     },
     "main": "src/electron-starter.js",
     "browserslist": {
@@ -31,5 +33,8 @@
             "last 1 firefox version",
             "last 1 safari version"
         ]
+    },
+    "devDependencies": {
+        "@types/sortablejs": "^1.10.6"
     }
 }
